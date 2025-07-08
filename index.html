@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot Platform</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 AI Chatbot Platform</h1>
+            <p>Create, customize, and deploy your own AI chatbots with ease</p>
+        </div>
+
+        <!-- Authentication Section -->
+        <div id="auth-section" class="auth-section">
+            <div id="login-form">
+                <h2>Login to Your Account</h2>
+                <div class="form-group">
+                    <label for="login-email">Email:</label>
+                    <input type="email" id="login-email" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password:</label>
+                    <input type="password" id="login-password" placeholder="Enter your password">
+                </div>
+                <button class="btn" onclick="login()">Login</button>
+                <button class="btn btn-secondary" onclick="showRegister()">Register</button>
+            </div>
+
+            <div id="register-form" class="hidden">
+                <h2>Create New Account</h2>
+                <div class="form-group">
+                    <label for="register-email">Email:</label>
+                    <input type="email" id="register-email" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Password:</label>
+                    <input type="password" id="register-password" placeholder="Enter your password">
+                </div>
+                <div class="form-group">
+                    <label for="register-confirm">Confirm Password:</label>
+                    <input type="password" id="register-confirm" placeholder="Confirm your password">
+                </div>
+                <button class="btn" onclick="register()">Register</button>
+                <button class="btn btn-secondary" onclick="showLogin()">Back to Login</button>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="dashboard hidden">
+            <div class="sidebar">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>My Chatbots</h2>
+                    <button class="btn" onclick="logout()">Logout</button>
+                </div>
+                <button class="btn" onclick="createNewChatbot()" style="width: 100%; margin-bottom: 20px;">+ Create New Chatbot</button>
+                <div id="chatbot-list"></div>
+            </div>
+
+            <div class="main-content">
+                <div id="welcome-message-placeholder"> <!-- Renamed ID -->
+                    <h2>Welcome to AI Chatbot Platform! 🎉</h2>
+                    <p>Create your first chatbot to get started. You can integrate various AI APIs and deploy your chatbot with a custom subdomain.</p>
+                </div>
+
+                <div id="chatbot-editor" class="hidden">
+                    <div class="tabs">
+                        <div class="tab active" onclick="switchTab('basic')">Basic Settings</div>
+                        <div class="tab" onclick="switchTab('api')">API Configuration</div>
+                        <div class="tab" onclick="switchTab('customize')">Customize</div>
+                        <div class="tab" onclick="switchTab('test')">Test & Preview</div>
+                        <div class="tab" onclick="switchTab('deploy')">Deploy</div>
+                    </div>
+
+                    <!-- Basic Settings Tab -->
+                    <div id="basic-tab" class="tab-content active">
+                        <h3>Basic Chatbot Settings</h3>
+                        <div class="form-group">
+                            <label for="bot-name">Chatbot Name:</label>
+                            <input type="text" id="bot-name" placeholder="My Awesome Chatbot">
+                        </div>
+                        <div class="form-group">
+                            <label for="bot-description">Description:</label>
+                            <textarea id="bot-description" rows="3" placeholder="Describe what your chatbot does"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="bot-personality">Personality/Instructions:</label>
+                            <textarea id="bot-personality" rows="4" placeholder="You are a helpful assistant that..."></textarea>
+                        </div>
+                        <button class="btn" onclick="saveBasicSettings()">Save Basic Settings</button>
+                    </div>
+
+                    <!-- API Configuration Tab -->
+                    <div id="api-tab" class="tab-content">
+                        <h3>API Configuration</h3>
+
+                        <div class="api-config">
+                            <h4>Primary AI Provider</h4>
+                            <div class="form-group">
+                                <label for="ai-provider">Choose AI Provider:</label>
+                                <select id="ai-provider" onchange="updateAPIFields()">
+                                    <option value="">Select Provider</option>
+                                    <option value="gemini">Google Gemini (AI Studio)</option>
+                                    <option value="deepseek">DeepSeek (OpenRouter)</option>
+                                    <option value="openai">OpenAI (OpenRouter)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="ai-api-key">API Key:</label>
+                                <input type="password" id="ai-api-key" placeholder="Enter your API key">
+                            </div>
+                            <div class="form-group">
+                                <label for="ai-model">Model:</label>
+                                <select id="ai-model">
+                                    <option value="">Select Model</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="api-config">
+                            <h4>Search Integration (Optional)</h4>
+                            <div class="form-group">
+                                <label for="search-provider">Search Provider:</label>
+                                <select id="search-provider">
+                                    <option value="">None</option>
+                                    <option value="serp">SERP API</option>
+                                    <!-- <option value="google">Google Search API</option> --> <!-- Not implemented in script -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="search-api-key">Search API Key:</label>
+                                <input type="password" id="search-api-key" placeholder="Enter search API key">
+                            </div>
+                        </div>
+
+                        <button class="btn" onclick="saveAPISettings()">Save API Configuration</button>
+                        <button class="btn btn-secondary" onclick="testAPIConnection()">Test Connection</button>
+                    </div>
+
+                    <!-- Customize Tab -->
+                    <div id="customize-tab" class="tab-content">
+                        <h3>Customize Appearance</h3>
+                        <div class="form-group">
+                            <label for="theme-color">Theme Color:</label>
+                            <input type="color" id="theme-color" value="#667eea">
+                        </div>
+                        <div class="form-group">
+                            <label for="welcome-message-text">Welcome Message:</label> <!-- Renamed ID -->
+                            <textarea id="welcome-message-text" rows="3" placeholder="Hi! How can I help you today?"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="chat-title">Chat Window Title:</label>
+                            <input type="text" id="chat-title" placeholder="Chat with AI">
+                        </div>
+                        <div class="form-group">
+                            <label for="bot-avatar">Bot Avatar URL:</label>
+                            <input type="url" id="bot-avatar" placeholder="https://example.com/avatar.png">
+                        </div>
+                        <button class="btn" onclick="saveCustomization()">Save Customization</button>
+                    </div>
+
+                    <!-- Test & Preview Tab -->
+                    <div id="test-tab" class="tab-content">
+                        <h3>Test Your Chatbot</h3>
+                        <div class="chat-preview" id="chat-preview">
+                            <div class="message bot">
+                                <strong>Bot:</strong> <span id="initial-welcome-message-preview">Hi! How can I help you today?</span>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" id="test-message" placeholder="Type your message..." onkeypress="if(event.key==='Enter') testMessage()">
+                            <button class="btn" onclick="testMessage()">Send</button>
+                        </div>
+                    </div>
+
+                    <!-- Deploy Tab -->
+                    <div id="deploy-tab" class="tab-content">
+                        <h3>Deploy Your Chatbot</h3>
+                        <div class="form-group">
+                            <label for="subdomain">Subdomain:</label>
+                            <input type="text" id="subdomain" placeholder="my-chatbot">
+                            <small>Your chatbot will be available at: <span id="subdomain-preview">my-chatbot.aichatbot.com</span></small>
+                            <small class="note">Note: Actual subdomain deployment requires a backend service to manage DNS and hosting. This is a simulation.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="deployment-password">Access Password (Optional):</label>
+                            <input type="password" id="deployment-password" placeholder="Leave empty for public access">
+                            <small class="note">Note: Password protection requires a backend to enforce.</small>
+                        </div>
+                        <button class="btn" onclick="deployChatbot()">Deploy Chatbot</button>
+                        <button class="btn btn-secondary" onclick="generateEmbedCode()">Generate Embed Code</button>
+
+                        <div id="standalone-download-section" style="margin-top: 20px;">
+                            <!-- Download button will be appended here dynamically by script.js -->
+                        </div>
+
+                        <div id="deployment-status" class="deployment-info hidden">
+                            <h4>Deployment Status</h4>
+                            <p><span class="status-indicator status-online"></span>Status: <span id="deploy-status">Deployed</span></p>
+                            <p>URL: <a href="#" id="deployed-url" target="_blank">https://my-chatbot.aichatbot.com</a></p>
+                            <p>Last Updated: <span id="last-updated">Just now</span></p>
+                        </div>
+
+                        <div id="embed-code-section" class="hidden">
+                            <h4>Embed Code</h4>
+                            <textarea id="embed-code" rows="6" readonly></textarea>
+                            <button class="btn" onclick="copyEmbedCode()">Copy Code</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
