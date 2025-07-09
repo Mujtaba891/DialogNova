@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Bots - AI Chatbot Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#667eea">
+</head>
+<body>
+    <div class="container">
+        <header class="main-header">
+            <div class="logo-container">
+                <h1 class="logo">🤖 AI Chatbot Platform</h1>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-item">Home</a>
+                <a href="bots.html" class="nav-item active">Explore Bots</a>
+                <a href="dashboard.html" class="nav-item">Dashboard</a>
+                <div class="auth-buttons">
+                    <a href="auth.html" id="login-signup-btn" class="btn btn-small">Login / Signup</a>
+                    <div id="user-profile-widget" class="hidden">
+                        <img id="profile-pic" src="https://via.placeholder.com/40" alt="Profile" class="profile-pic">
+                        <span id="user-email-display"></span>
+                        <button class="btn btn-small btn-secondary" onclick="logout()">Logout</button>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <main class="explore-bots-main">
+            <h2>Explore Chatbots</h2>
+            <div class="filter-controls">
+                <button class="btn btn-secondary" id="filter-my-bots" onclick="filterBots('my')">My Bots</button>
+                <button class="btn" id="filter-all-bots" onclick="filterBots('all')">All Public Bots</button>
+            </div>
+            <div id="bots-list-container" class="bots-grid">
+                <p style="text-align: center; color: #666; padding: 50px;">Loading bots...</p>
+            </div>
+        </main>
+
+        <footer class="main-footer">
+            <p>&copy; 2023 AI Chatbot Platform. All rights reserved.</p>
+        </footer>
+    </div>
+    <script type="module" src="script.js"></script>
+    <script>
+        // Specific init for bots page
+        document.addEventListener('DOMContentLoaded', () => {
+            // initializePage() is now called by onAuthStateChanged in script.js
+            // The loading of bots is handled by initializePageContent -> loadPublicAndMyBots
+        });
+    </script>
+</body>
+</html>

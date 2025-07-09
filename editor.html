@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Chatbot - AI Chatbot Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#667eea">
+</head>
+<body>
+    <div class="container">
+        <header class="main-header">
+            <div class="logo-container">
+                <h1 class="logo">🤖 AI Chatbot Platform</h1>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-item">Home</a>
+                <a href="bots.html" class="nav-item">Explore Bots</a>
+                <a href="dashboard.html" class="nav-item">Dashboard</a>
+                <div class="auth-buttons">
+                    <div id="user-profile-widget">
+                        <img id="profile-pic" src="https://via.placeholder.com/40" alt="Profile" class="profile-pic">
+                        <span id="user-email-display"></span>
+                        <button class="btn btn-small btn-secondary" onclick="logout()">Logout</button>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <main class="editor-main">
+            <aside class="editor-sidebar">
+                <h2><span id="editor-bot-name-display"></span> Settings</h2>
+                <div class="tabs">
+                    <div class="tab active" onclick="switchTab('basic')">Basic Settings</div>
+                    <div class="tab" onclick="switchTab('api')">API Configuration</div>
+                    <div class="tab" onclick="switchTab('customize')">Customize UI</div>
+                    <div class="tab" onclick="switchTab('testing')">Test & Preview</div>
+                    <div class="tab" onclick="switchTab('deploy')">Deploy & Share</div>
+                </div>
+                <button class="btn btn-secondary" onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+            </aside>
+
+            <section class="editor-content">
+                <div id="no-chatbot-selected-message" class="info-message">
+                    <h3>No Chatbot Selected</h3>
+                    <p>Please go to the <a href="dashboard.html">Dashboard</a> to select or create a chatbot to edit.</p>
+                </div>
+
+                <div id="chatbot-editor-content" class="hidden">
+                    <!-- Basic Settings Tab -->
+                    <div id="basic-tab" class="tab-content active">
+                        <h3>Basic Chatbot Settings</h3>
+                        <div class="form-group">
+                            <label for="bot-name">Chatbot Name:</label>
+                            <input type="text" id="bot-name" placeholder="My Awesome Chatbot">
+                        </div>
+                        <div class="form-group">
+                            <label for="bot-description">Description:</label>
+                            <textarea id="bot-description" rows="3" placeholder="Describe what your chatbot does"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="bot-personality">Personality/Instructions:</label>
+                            <textarea id="bot-personality" rows="4" placeholder="You are a helpful assistant that..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="bot-public">Publicly Visible?</label>
+                            <input type="checkbox" id="bot-public" style="width: auto; margin-top: 10px;">
+                            <small class="note">If checked, other users can see your bot on the "Explore Bots" page.</small>
+                        </div>
+                        <button class="btn" id="save-basic-settings-btn" onclick="saveBasicSettings()">Save Basic Settings</button>
+                    </div>
+
+                    <!-- API Configuration Tab -->
+                    <div id="api-tab" class="tab-content">
+                        <h3>API Configuration</h3>
+                        <p class="note error-message-text">
+                            <strong>IMPORTANT SECURITY WARNING:</strong>
+                            In this client-side demo, API keys are stored and used directly in the browser.
+                            <br><strong>For any real-world application, ALL API keys MUST be handled via a secure backend proxy to protect them from exposure.</strong>
+                            Do NOT use production API keys directly in client-side code.
+                        </p>
+
+                        <div class="api-config">
+                            <h4>Primary AI Provider</h4>
+                            <div class="form-group">
+                                <label for="ai-provider">Choose AI Provider:</label>
+                                <select id="ai-provider" onchange="updateAPIFields()">
+                                    <option value="">Select Provider</option>
+                                    <option value="gemini">Google Gemini (AI Studio)</option>
+                                    <option value="deepseek">DeepSeek (OpenRouter)</option>
+                                    <option value="openai">OpenAI (OpenRouter)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="ai-api-key">API Key:</label>
+                                <input type="password" id="ai-api-key" placeholder="Enter your API key">
+                            </div>
+                            <div class="form-group">
+                                <label for="ai-model">Model:</label>
+                                <select id="ai-model">
+                                    <option value="">Select Model</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="api-config">
+                            <h4>Search Integration (Optional)</h4>
+                            <div class="form-group">
+                                <label for="search-provider">Search Provider:</label>
+                                <select id="search-provider">
+                                    <option value="">None</option>
+                                    <option value="serp">SERP API</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="search-api-key">Search API Key:</label>
+                                <input type="password" id="search-api-key" placeholder="Enter search API key">
+                                <small class="note error-message-text">
+                                    <strong>Search API Warning:</strong>
+                                    Live search (e.g., SerpAPI) requires a backend proxy to bypass CORS and securely use your API key.
+                                    In this client-side demo, search functionality will be **MOCKED**.
+                                </small>
+                            </div>
+                        </div>
+
+                        <button class="btn" id="save-api-settings-btn" onclick="saveAPISettings()">Save API Configuration</button>
+                        <button class="btn btn-secondary" id="test-api-button" onclick="testAPIConnection()">Test Connection</button>
+                    </div>
+
+                    <!-- Customize Tab -->
+                    <div id="customize-tab" class="tab-content">
+                        <h3>Customize Appearance (Form-based)</h3>
+                        <p class="note error-message-text">A visual drag & drop editor is an advanced feature not supported by this client-side demo. You can customize using the fields below.</p>
+                        
+                        <div class="api-config">
+                            <h4>Colors & Themes</h4>
+                            <div class="form-group">
+                                <label for="theme-color">Overall Theme Color:</label>
+                                <input type="color" id="theme-color" value="#667eea">
+                            </div>
+                            <div class="form-group">
+                                <label for="message-user-color">User Message Bubble Color:</label>
+                                <input type="color" id="message-user-color" value="#007bff">
+                            </div>
+                            <div class="form-group">
+                                <label for="message-user-text-color">User Message Text Color:</label>
+                                <input type="color" id="message-user-text-color" value="#ffffff">
+                            </div>
+                            <div class="form-group">
+                                <label for="message-bot-color">Bot Message Bubble Color:</label>
+                                <input type="color" id="message-bot-color" value="#e9ecef">
+                            </div>
+                            <div class="form-group">
+                                <label for="message-bot-text-color">Bot Message Text Color:</label>
+                                <input type="color" id="message-bot-text-color" value="#333333">
+                            </div>
+                        </div>
+
+                        <div class="api-config">
+                            <h4>Text & Layout</h4>
+                            <div class="form-group">
+                                <label for="welcome-message-text">Welcome Message:</label>
+                                <textarea id="welcome-message-text" rows="3" placeholder="Hi! How can I help you today?"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="chat-title">Chat Window Title:</label>
+                                <input type="text" id="chat-title" placeholder="Chat with AI">
+                            </div>
+                            <div class="form-group">
+                                <label for="bot-avatar">Bot Avatar URL:</label>
+                                <input type="url" id="bot-avatar" placeholder="https://example.com/avatar.png">
+                            </div>
+                            <div class="form-group">
+                                <label for="splash-text">Splash Screen Text (for standalone/embed):</label>
+                                <input type="text" id="splash-text" placeholder="Loading your AI...">
+                            </div>
+                            <div class="form-group">
+                                <label for="header-text">Header Text (for standalone/embed):</label>
+                                <input type="text" id="header-text" placeholder="Chat with AI">
+                            </div>
+                            <div class="form-group">
+                                <label for="chat-layout">Chat Layout:</label>
+                                <select id="chat-layout">
+                                    <option value="default">Default</option>
+                                    <option value="compact">Compact (Smaller Messages)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="api-config">
+                            <h4>Features Toggles</h4>
+                            <div class="form-group">
+                                <label for="enable-chat-history">Enable Chat History (Basic Demo)</label>
+                                <input type="checkbox" id="enable-chat-history" style="width: auto;">
+                                <small class="note">If checked, chat history will be stored in browser's local storage (basic demo).</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="enable-search-bar">Enable Search Bar (Non-functional in Demo)</label>
+                                <input type="checkbox" id="enable-search-bar" style="width: auto;">
+                                <small class="note error-message-text">This will display a search bar, but actual search functionality requires a backend and is not implemented in this client-side demo due to API key security.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="enable-bot-profile">Enable Bot Profile Sidebar (Standalone/Embed)</label>
+                                <input type="checkbox" id="enable-bot-profile" style="width: auto;">
+                                <small class="note">Displays a simple sidebar with bot info in standalone/embedded versions.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="require-chatbot-auth">Require Authentication for Chatbot Access?</label>
+                                <input type="checkbox" id="require-chatbot-auth" style="width: auto;">
+                                <small class="note error-message-text">
+                                    **WARNING: This is a CLIENT-SIDE PLACEHOLDER!** Implementing secure authentication
+                                    for your deployed chatbot requires a **backend server** to manage user sessions
+                                    and protect API keys. Do NOT rely on this for real security.
+                                </small>
+                            </div>
+                        </div>
+
+                        <button class="btn" id="save-customization-btn" onclick="saveCustomization()">Save Customization</button>
+                    </div>
+
+                    <!-- Test & Preview Tab -->
+                    <div id="testing-tab" class="tab-content">
+                        <h3>Test Your Chatbot</h3>
+                        <p class="note">Messages sent here use the API keys directly from your browser (for demo purposes only - see API tab warning).</p>
+                        <div class="chat-preview" id="chat-preview">
+                            <div class="message bot">
+                                <strong>Bot:</strong> <span id="initial-welcome-message-preview">Hi! How can I help you today?</span>
+                            </div>
+                            <!-- Test messages dynamically added here -->
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" id="test-message" placeholder="Type your message..." onkeypress="if(event.key==='Enter') testMessage()">
+                            <button class="btn" id="send-test-message-btn" onclick="testMessage()">Send</button>
+                        </div>
+                    </div>
+
+                    <!-- Deploy Tab -->
+                    <div id="deploy-tab" class="tab-content">
+                        <h3>Deploy Your Chatbot</h3>
+                        <div class="form-group">
+                            <label for="subdomain">Subdomain (Conceptual):</label>
+                            <input type="text" id="subdomain" placeholder="my-chatbot">
+                            <small>Your chatbot's conceptual URL: <span id="subdomain-preview">my-chatbot.aichatbot.com</span></small>
+                            <small class="note error-message-text">
+                                **Important Note:** This "deployment" is a **simulation** for this client-side demo.
+                                True subdomain deployment (e.g., `your-bot.yourdomain.com`) requires a backend server
+                                to dynamically serve content based on the subdomain. The generated URL will likely
+                                not work as a live site without additional server-side setup.
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <label for="deployment-password">Access Password (Optional):</label>
+                            <input type="password" id="deployment-password" placeholder="Leave empty for public access">
+                            <small class="note">Note: Password protection would also require a backend to enforce.</small>
+                        </div>
+                        <button class="btn" id="save-deploy-settings-btn" onclick="deployChatbot()">Save Deployment Settings</button>
+
+                        <div id="deployment-status" class="deployment-info hidden">
+                            <h4>Deployment Status</h4>
+                            <p><span class="status-indicator status-online"></span>Status: <span id="deploy-status">Deployed</span></p>
+                            <p>Conceptual URL: <a href="#" id="deployed-url" target="_blank">https://my-chatbot.aichatbot.com</a></p>
+                            <p>Last Updated: <span id="last-updated">Just now</span></p>
+                            <small class="note success-message-text">
+                                **Success!** Your chatbot configuration is saved as "deployed" in the platform.
+                                To get a functional version for embedding or direct use, see options below.
+                            </small>
+                        </div>
+
+                        <h4 style="margin-top: 30px;">Shareable Link</h4>
+                        <p class="note">Use this link to share your chatbot directly from the platform. It will load on a dedicated page: `dialog-nova.vercel.app/chat.html`.</p>
+                        <textarea id="share-link" rows="2" readonly style="margin-bottom: 10px;"></textarea>
+                        <button class="btn" onclick="copyShareLink()">Copy Share Link</button>
+                        <button class="btn btn-secondary" onclick="generateShareLink()">Generate Link</button>
+
+
+                        <h4 style="margin-top: 30px;">Embed Code</h4>
+                        <p class="note">Embed your chatbot directly into any website.</p>
+                        <textarea id="embed-code" rows="6" readonly style="margin-bottom: 10px;"></textarea>
+                        <button class="btn" onclick="copyEmbedCode()">Copy Embed Code</button>
+                        <button class="btn btn-secondary" onclick="generateEmbedCode()">Generate Embed Code</button>
+
+                        <h4 style="margin-top: 30px;">Download Standalone HTML (PWA)</h4>
+                        <p class="note">Download a single HTML file containing your entire chatbot. This file can be opened directly in a browser and can be installed as a Progressive Web App (PWA).</p>
+                        <p class="note error-message-text">
+                            <strong>CRITICAL SECURITY WARNING for Standalone HTML:</strong>
+                            This file will contain your AI API key directly within its JavaScript.
+                            **DO NOT use this method for production deployments that require API key security.**
+                            Always use a secure backend proxy for sensitive API keys in live applications.
+                        </p>
+                        <div id="standalone-download-section" style="margin-top: 20px;">
+                            <button class="btn btn-secondary" id="download-standalone-btn" onclick="generateStandaloneChatbot()">Download Standalone HTML (PWA)</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="main-footer">
+            <p>© 2023 AI Chatbot Platform. All rights reserved.</p>
+        </footer>
+    </div>
+    <script type="module" src="script.js"></script>
+    <script type="module" src="editor.js"></script>
+</body>
+</html>

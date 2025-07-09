@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AI Chatbot Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#667eea">
+</head>
+<body>
+    <div class="container">
+        <header class="main-header">
+            <div class="logo-container">
+                <h1 class="logo">🤖 AI Chatbot Platform</h1>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-item">Home</a>
+                <a href="bots.html" class="nav-item">Explore Bots</a>
+                <a href="dashboard.html" class="nav-item active">Dashboard</a>
+                <div class="auth-buttons">
+                    <div id="user-profile-widget">
+                        <img id="profile-pic" src="https://via.placeholder.com/40" alt="Profile" class="profile-pic">
+                        <span id="user-email-display"></span>
+                        <button class="btn btn-small btn-secondary" onclick="logout()">Logout</button>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <main class="dashboard-main">
+            <aside class="dashboard-sidebar">
+                <h2>My Chatbots</h2>
+                <button class="btn" onclick="createNewChatbot()" style="width: 100%; margin-bottom: 20px;">+ Create New Chatbot</button>
+                <div id="chatbot-list"></div>
+            </aside>
+
+            <section class="dashboard-content">
+                <div id="welcome-message-placeholder" class="dashboard-section">
+                    <h2>Welcome to Your Dashboard! 🎉</h2>
+                    <p>Select a chatbot from the left or create a new one to start customizing.</p>
+                    <div class="dashboard-card">
+                        <h3>Your Profile</h3>
+                        <p>Email: <span id="profile-email"></span></p>
+                        <p>Last Login: <span id="profile-last-login"></span></p>
+                        <button class="btn btn-secondary" onclick="showEditProfilePlaceholder()">Edit Profile</button>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>API Documentation</h3>
+                        <p>Access detailed guides on integrating various AI and search APIs.</p>
+                        <a href="https://developers.google.com/gemini/api" target="_blank" class="btn btn-small">Gemini API Docs</a>
+                        <a href="https://openrouter.ai/docs" target="_blank" class="btn btn-small">OpenRouter API Docs</a>
+                        <a href="https://serpapi.com/playground" target="_blank" class="btn btn-small">SerpAPI Docs</a>
+                    </div>
+                </div>
+
+                <div id="chatbot-editor" class="hidden dashboard-section">
+                    <!-- This section is now purely a placeholder, actual editing happens on editor.html -->
+                    <h2>Chatbot Settings</h2>
+                    <p>You have selected a chatbot. Click "Edit Chatbot" to go to the dedicated editor.</p>
+                    <h3 id="selected-bot-name"></h3>
+                    <p id="selected-bot-description"></p>
+                    <button class="btn" onclick="goToEditor()">Edit Chatbot Settings</button>
+                    <button class="btn btn-danger" onclick="deleteChatbot()">Delete Chatbot</button>
+                </div>
+            </section>
+        </main>
+        <footer class="main-footer">
+            <p>&copy; 2023 AI Chatbot Platform. All rights reserved.</p>
+        </footer>
+    </div>
+    <script type="module" src="script.js"></script>
+    <script>
+        // Specific init for dashboard page
+        document.addEventListener('DOMContentLoaded', () => {
+            // initializePage() is now called by onAuthStateChanged in script.js
+            // If coming directly to dashboard with no current user, script.js redirects.
+        });
+        window.showEditProfilePlaceholder = function() {
+            window.showMessage("Edit profile functionality is a placeholder in this demo.", "info");
+        }
+    </script>
+</body>
+</html>
