@@ -239,36 +239,6 @@
         .message strong { font-weight: bold; }
         .message em { font-style: italic; }
         .message a { color: inherit; text-decoration: underline; }
-        .message h1, .message h2, .message h3, .message h4, .message h5, .message h6 {
-            margin-top: 1em;
-            margin-bottom: 0.5em;
-            font-weight: bold;
-            line-height: 1.2;
-            color: #333; /* Darker color for headings */
-        }
-        .message h1 { font-size: 1.8em; }
-        .message h2 { font-size: 1.5em; }
-        .message h3 { font-size: 1.3em; }
-        .message h4 { font-size: 1.1em; }
-        .message h5 { font-size: 1em; }
-        .message h6 { font-size: 0.9em; }
-
-        .message ul, .message ol {
-            margin: 1em 0;
-            padding-left: 25px;
-            list-style-position: outside;
-        }
-        .message ul li { list-style-type: disc; margin-bottom: 0.5em; }
-        .message ol li { list-style-type: decimal; margin-bottom: 0.5em; }
-
-        .message blockquote {
-            border-left: 4px solid #ccc;
-            padding: 5px 15px;
-            margin: 1em 0;
-            color: #555;
-            background-color: #f9f9f9;
-            border-radius: 5px;
-        }
 
         /* Inline code */
         .message code {
@@ -347,15 +317,12 @@
                 height: 100vh; /* Full viewport height on small screens */
                 border-radius: 0;
                 box-shadow: none;
-                max-width: 100%; /* Take full width on small screens */
             }
             .chat-messages { padding: 15px; }
             .chat-input { padding: 15px; }
             .message { max-width: 90%; }
             .chat-sidebar.open { width: 180px; padding: 15px; }
             .sidebar-toggle-btn { display: block; } /* Always show toggle on mobile */
-            .chat-header h1 { font-size: 1.1em; }
-            .chat-header p { font-size: 0.8em; }
         }
         @media (min-width: 601px) {
              /* Only show toggle button if sidebar is enabled AND not full-width */
